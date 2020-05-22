@@ -22,9 +22,9 @@ class VGG(nn.Module):
         self.features = features
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         self.classifier = nn.Sequential(
-            nn.ReLU(True),
+            FR(),
             nn.Linear(512 * 7 * 7, 512),
-            nn.ReLU(True),
+            FR(),
             nn.Dropout(),
             nn.Linear(512, 512),
             nn.ReLU(True),
@@ -67,7 +67,7 @@ def make_layers(cfg, batch_norm=True):
                 if in_channels == 3:
                     layers += [nn.BatchNorm2d(in_channels), conv2d]
                 else:
-                    layers += [nn.BatchNorm2d(in_channels), nn.ReLU(True), conv2d]
+                    layers += [nn.BatchNorm2d(in_channels), FR(), conv2d]
             else:
                 if in_channels == 3:
                     layers += [conv2d]
@@ -97,6 +97,6 @@ def _vgg(arch, cfg, batch_norm, pretrained, progress, **kwargs):
     return model
 
 
-def vgg16_origin(pretrained=False, progress=True, **kwargs):
+def vgg16(pretrained=False, progress=True, **kwargs):
 
     return _vgg('vgg16', 'D', True, pretrained, progress, **kwargs)
